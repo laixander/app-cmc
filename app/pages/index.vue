@@ -52,27 +52,71 @@
             </UPageSection>
             <UPageSection title="Project Tracking"
                 description="Monitor research project progress, milestones, and budget utilization">
-                <div class="w-full grid grid-cols-1 content-start gap-4">
+                <div class="w-full grid grid-cols-2 content-start gap-8">
                     <UCard v-for="project in [
-                        { title: 'Marine Ecosystem Restoration Project', code: 'P003', status: 'On Track', date: '2024-05-01', lead: 'Dr. Sarah Johnson • Marine Biology' },
-                        { title: 'Climate Impact on Fish Migration Patterns', code: 'P002', status: 'On Track', date: '2024-06-15', lead: 'Dr. Michael Chen • Oceanography' },
-                        { title: 'Sustainable Aquaculture Technology Development', code: 'P001', status: 'On Track', date: '2024-07-10', lead: 'Dr. Emily Rodriguez • Fisheries Technology' }
-                    ]">
+                        { title: 'Marine Ecosystem Restoration Project', code: 'P003', status: 'On Track', days: 87, progress: 75, utilization: 72, spent: '1.8M', budget: '2.5M', date: '2026-05-01', lead: 'Dr. Sarah Johnson • Marine Biology' },
+                        { title: 'Climate Impact on Fish Migration Patterns', code: 'P002', status: 'On Track', days: 158, progress: 45, utilization: 50, spent: '0.9M', budget: '1.8M', date: '2026-06-15', lead: 'Dr. Michael Chen • Oceanography' },
+                        { title: 'Sustainable Aquaculture Technology Development', code: 'P001', status: 'Delayed', days: 5, progress: 90, utilization: 84, spent: '2.7M', budget: '3.2M', date: '2026-07-10', lead: 'Dr. Emily Rodriguez • Fisheries Technology' }
+                    ]" :ui="{
+                        footer: 'flex justify-between items-center'
+                    }">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center gap-2">
                                 <div class="font-semibold text-highlighted">{{ project.title }}</div>
                                 <UBadge color="neutral" variant="outline" class="rounded-full">{{ project.code }}</UBadge>
                             </div>
-                            <UBadge :label="project.status" color="lime" variant="soft" class="rounded-full" />
+                            <UBadge 
+                                :label="project.status" 
+                                :color="{
+                                    'On Track': 'green' as const,
+                                    'Delayed': 'amber' as const,
+                                    'At Risk': 'red' as const,
+                                    'Completed': 'sky' as const,
+                                    'On Hold': 'gray' as const
+                                }[project.status] || 'gray'"
+                                variant="soft" 
+                                class="rounded-full" 
+                            />
                         </div>
                         <div class="text-sm text-muted">
                             Lead: {{ project.lead }}
                         </div>
-                        <!-- <template #trailing>
-                            <div class="text-sm text-dimmed">
-                                {{ new Date(project.date).toLocaleDateString() }}
+                        <div class="grid grid-cols-1 gap-6 mt-4">
+                            <UFormField :hint="`${project.progress}% completed`" class="w-full">
+                                <template #label>
+                                    <UIcon name="i-lucide-chart-no-axes-column" class="mr-1" />
+                                    Overall Progress
+                                </template>
+                                <UProgress 
+                                    :model-value="project.progress" 
+                                    :color="{
+                                        'On Track': 'green' as const,
+                                        'Delayed': 'amber' as const,
+                                        'At Risk': 'red' as const,
+                                        'Completed': 'sky' as const,
+                                        'On Hold': 'gray' as const
+                                    }[project.status] || 'gray'" 
+                                />
+                            </UFormField>
+                            <UFormField :hint="`${project.utilization}%`" :help="`₱${project.spent}/₱${project.budget} of budget allocated`" class="w-full">
+                                <template #label>
+                                    <UIcon name="i-lucide-philippine-peso" class="mr-1" />
+                                    Budget Utilization
+                                </template>
+                                <UProgress 
+                                    :model-value="project.utilization"
+                                />
+                            </UFormField>
+                        </div>
+                        <template #footer>
+                            <div class="flex items-center gap-2">
+                                <UIcon name="i-lucide-calendar" />
+                                <span class="font-semibold text-sm">{{ project.days }} days left</span>
                             </div>
-                        </template> -->
+                            <div class="text-sm text-muted">
+                                Deadline: {{ new Date(project.date).toLocaleDateString() }}
+                            </div>
+                        </template>
                     </UCard>
                 </div> 
             </UPageSection>
