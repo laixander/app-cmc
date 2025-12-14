@@ -95,17 +95,31 @@
                             </UFormField>
                             <UFormField :ui="{
                                 label: 'flex items-center gap-2',
+                                hint: 'flex items-center gap-1',
                                 help: 'flex justify-between items-center text-xs'
-                            }" :hint="`${project.utilization}%`" class="w-full">
+                            }" class="w-full">
                                 <template #label>
                                     <UIcon name="i-lucide-banknote" class="size-5" />
                                     Budget Utilization
                                 </template>
+                                <template #hint>
+                                    {{ project.utilization }}%
+                                    <UPopover>
+                                        <UIcon name="i-lucide-info" class="text-dimmed" />
+                                        <template #content>
+                                            <div class="p-4 space-y-1">
+                                                <p class="text-sm text-muted">Budget Utilization</p>
+                                                <p class="text-sm text-muted">Spent: ₱{{ project.spent }}</p>
+                                                <p class="text-sm text-muted">Budget: ₱{{ project.budget }}</p>
+                                            </div>
+                                        </template>
+                                    </UPopover>
+                                </template>
                                 <UProgress :model-value="project.utilization" />
-                                <template #help>
+                                <!-- <template #help>
                                     <span>Spent: ₱{{ project.spent }}</span>
                                     <span>Budget: ₱{{ project.budget }}</span>
-                                </template>
+                                </template> -->
                             </UFormField>
                         </div>
                         <USeparator class="mt-4 mb-2" />
